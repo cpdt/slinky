@@ -19,7 +19,7 @@ curl -o- https://raw.githubusercontent.com/cpdt/slinky/master/install.sh | /bin/
 Slinky will automagically download and install, however to be able to run Slink-ed commands from Windows, you must add the following path to your Windows PATH variable (to edit the PATH variable, hit start, type `environment variables` and press [Enter], click `Environment variables...`, select `Path` in the top list, and hit `Edit`). Add the following path:
 
 ```
-%appdata%\..\local\lxss\rootfs\usr\local\bin\slinky-link
+C:\.slinky
 ```
 
 ## Usage
