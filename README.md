@@ -4,7 +4,7 @@
 
 ![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
 
-Slinky allows you to run Linux commands in the Windows shell through the power of Ubuntu for Windows. Instead of having to open up `bash` whenever you need to do some bash out some scripts, Slinky lets you run those commands straight in your Windows command prompt.
+Slinky allows you to run Linux commands in the Windows shell through the power of Ubuntu for Windows. Instead of having to open up `bash` whenever you need to bash out some scripts, Slinky lets you run those commands straight in your Windows command prompt.
 
 > **Note:** Ubuntu for Windows is currently a part of the Windows Insider _fast_ ring, and so is unstable and breaks from time to time. Use with caution!
 
