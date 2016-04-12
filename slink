@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# configuration properties
+install_dir="/mnt/c/.slinky"
+run_file="/usr/local/bin/slinky-run.sh"
+win_bash="C:/Windows/System32/bash.exe"
+
+if [ $# -lt 1 ]
+then
+  echo "Usage: slink [win command] [linux command]"
+  echo ""
+  echo "Link [win command] in the Windows command prompt to [linux command] in Bash for Windows."
+  echo "By only providing one argument, the same command name will be used in Windows and Linux."
+  exit 1
+fi
+
+if [ $# -eq 1 ]
+then
+  linux_command=$1
+else
+  linux_command=$2
+fi
+
+file_name="$install_dir/$1.bat"
+dirchange_name="%~dp0.dirchange"
+mkdir -p $install_dir
+echo -e "@echo off\r" > $file_name
+echo -e "$win_bash $run_file $linux_command %*\r" >> $file_name
+echo -e "set dirchange=\r" >> $file_name
+echo -e "set /p dirchange=<$dirchange_name\r" >> $file_name
+echo -e "if defined dirchange cd %dirchange%\r" >> $file_name
+chmod u=rwx,g=rx,o=r $file_name
+
+echo "$file_name ---> $SHELL $1"

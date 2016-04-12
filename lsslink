@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# configuration properties
+install_dir="/mnt/c/.slinky"
+
+ls "$install_dir" | sed 's/\(.*\)\..*/\1/'

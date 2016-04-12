@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# configuration properties
+install_dir="/mnt/c/.slinky"
+
+if [ $# -lt 1 ]
+then
+  echo "Usage: rmslink [win command]"
+  echo ""
+  echo "Remove the link between [win command] and a Bash for Windows command."
+  exit 1
+fi
+
+file_name="$install_dir/$1.bat"
+rm "$file_name"
+
+echo "$file_name -/-> $SHELL"
