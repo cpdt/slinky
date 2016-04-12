@@ -1,8 +1,8 @@
 # Slinky
 
-![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
+> **Super Link, Yo** - Run native Linux commands from your Windows shell!
 
-> Run native Linux commands from your Windows shell!
+![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
 
 Slinky allows you to run Linux commands in the Windows shell through the power of Ubuntu for Windows. Instead of having to open up `bash` whenever you need to do some bash out some scripts, Slinky lets you run those commands straight in your Windows command prompt.
 
