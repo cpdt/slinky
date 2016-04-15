@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# configuration properties
-install_dir="/mnt/c/.slinky"
-run_file="/usr/local/bin/slinky-run.sh"
-win_bash="C:/Windows/System32/bash.exe"
+source ./slinky.cfg
 
 if [ $# -lt 1 ]
 then
@@ -25,10 +22,11 @@ file_name="$install_dir/$1.bat"
 dirchange_name="%~dp0.dirchange"
 mkdir -p $install_dir
 echo -e "@echo off\r" > $file_name
+echo -e "rem $linux_command\r" >> $file_name
 echo -e "$win_bash $run_file $linux_command %*\r" >> $file_name
 echo -e "set dirchange=\r" >> $file_name
 echo -e "set /p dirchange=<$dirchange_name\r" >> $file_name
 echo -e "if defined dirchange cd %dirchange%\r" >> $file_name
 chmod u=rwx,g=rx,o=r $file_name
 
-echo "$file_name ---> $SHELL $1"
+echo "$file_name ---> $1"

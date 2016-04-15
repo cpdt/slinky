@@ -9,6 +9,7 @@ cp "./rmslink" "$install_dir/rmslink"
 cp "./lsslink" "$install_dir/lsslink"
 cp "./slinky-run.sh" "$install_dir/slinky-run.sh"
 cp "./relativepath.sh" "$install_dir/relativepath.sh"
+cp "./slinky.cfg" "$install_dir/slinky.cfg"
 
 echo "Updating permissions"
 chmod u+rx "$install_dir/slink"
@@ -16,6 +17,7 @@ chmod u+rx "$install_dir/rmslink"
 chmod u+rx "$install_dir/lsslink"
 chmod u+r "$install_dir/slinky-run.sh"
 chmod u+r "$install_dir/relativepath.sh"
+chmod u+r "$install_dir/slinky.cfg"
 
 echo "Creating Slinky command links for Windows use..."
 eval "$install_dir/slink" slink

@@ -1,7 +1,6 @@
 #!/bin/bash
 
-# configuration properties
-install_dir="/mnt/c/.slinky"
+source ./slinky.cfg
 
 if [ $# -lt 1 ]
 then
