@@ -6,7 +6,7 @@
 
 Slinky allows you to run Linux commands in the Windows shell through the power of Ubuntu for Windows. Instead of having to open up `bash` whenever you need to bash out some scripts, Slinky lets you run those commands straight in your Windows command prompt.
 
-> **Note:** Ubuntu for Windows is currently a part of the Windows Insider _fast_ ring, and so is unstable and breaks from time to time. Use with caution!
+**You will need Windows build 14316 or later in order to use Slinky.** At the time of writing, these builds are only available in the _fast_ ring of the Windows Insider program, so the Ubuntu for Windows will still be unstable and may break from time to time. Use with caution!
 
 ## Install
 
