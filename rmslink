@@ -10,7 +10,11 @@ then
   exit 1
 fi
 
-file_name="$install_dir/$1.bat"
-rm "$file_name"
+filename="$install_dir/$1.bat"
 
-echo "$file_name -/-> $SHELL"
+command_line=$(tail -n+2 $filename | head -n1)
+linux_name=${command_line#'rem '}
+
+rm "$filename"
+
+echo "$filename -/-> $linux_name"
