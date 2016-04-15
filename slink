@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./slinky.cfg
+source $(dirname $0)/slinky.cfg
+
 
 if [ $# -lt 1 ]
 then
