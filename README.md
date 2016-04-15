@@ -76,6 +76,10 @@ You can view a list of the Windows command names of all commands with the `lssli
 $ lsslink
 ```
 
+#### Usage in Bash
+
+Slinky commands are written as Bash script files, and so are available on the Bash shell. Slinky is actually used in order to provide these commands in the Windows command prompt.
+
 ## License
 
 Slinky is licensed under the MIT license, included in the `LICENSE` file.
