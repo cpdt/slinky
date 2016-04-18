@@ -76,6 +76,14 @@ You can view a list of the Windows command names of all commands with the `lssli
 $ lsslink
 ```
 
+#### Uninstall Slinky
+
+Tired of being awesome and want to go back to being a regular command-prompt user? The `delslink` command is for you! This command will, as the name suggests, delete Slinky and all related files from your computer. **Slinky links will not be kept around, so if you uninstall Slinky and then re-install, you will need to re-create all of your links.**
+
+```bash
+$ delslink
+```
+
 #### Usage in Bash
 
 Slinky commands are written as Bash script files, and so are available on the Bash shell. Slinky is actually used in order to provide these commands in the Windows command prompt.
