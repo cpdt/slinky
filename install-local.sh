@@ -3,26 +3,19 @@
 # Local installer - assumes all required files are in the current directory
 install_dir="/usr/local/bin"
 
-echo "Copying files to install location"
-cp "./slink" "$install_dir/slink"
-cp "./rmslink" "$install_dir/rmslink"
-cp "./lsslink" "$install_dir/lsslink"
-cp "./slinky-run.sh" "$install_dir/slinky-run.sh"
-cp "./relativepath.sh" "$install_dir/relativepath.sh"
-cp "./slinky.cfg" "$install_dir/slinky.cfg"
+downloads=('slink' 'rmslink' 'lsslink' 'delslink' 'slinky-run.sh' 'relativepath.sh' 'slinky.cfg')
 
-echo "Updating permissions"
-chmod u+rx "$install_dir/slink"
-chmod u+rx "$install_dir/rmslink"
-chmod u+rx "$install_dir/lsslink"
-chmod u+r "$install_dir/slinky-run.sh"
-chmod u+r "$install_dir/relativepath.sh"
-chmod u+r "$install_dir/slinky.cfg"
+for file in "${downloads[@]}"; do
+  echo "Copying ./$file to $install_dir/$file"
+  cp "./$file" "$install_dir/$file"
+  chmod u+rx "$install_dir/$file"
+done
 
 echo "Creating Slinky command links for Windows use..."
 eval "$install_dir/slink" slink
 eval "$install_dir/slink" rmslink
 eval "$install_dir/slink" lsslink
+eval "$install_dir/slink" delslink
 
 echo "Finished installing Slinky!"
 echo

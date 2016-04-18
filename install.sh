@@ -6,26 +6,19 @@ download_location="https://raw.githubusercontent.com/cpdt/slinky/master"
 
 echo "Starting Slinky download from $download_location"
 
-# download slink
-curl -o- "$download_location/slink" > "$install_dir/slink"
-curl -o- "$download_location/rmslink" > "$install_dir/rmslink"
-curl -o- "$download_location/lsslink" > "$install_dir/lsslink"
-curl -o- "$download_location/slinky-run.sh" > "$install_dir/slinky-run.sh"
-curl -o- "$download_location/relativepath.sh" > "$install_dir/relativepath.sh"
-curl -o- "$download_location/slinky.cfg" > "$install_dir/slinky.cfg"
+downloads=('slink' 'rmslink' 'lsslink' 'delslink' 'slinky-run.sh' 'relativepath.sh' 'slinky.cfg')
 
-echo "Updating permissions"
-chmod u+rx "$install_dir/slink"
-chmod u+rx "$install_dir/rmslink"
-chmod u+rx "$install_dir/lsslink"
-chmod u+r "$install_dir/slinky-run.sh"
-chmod u+r "$install_dir/relativepath.sh"
-chmod u+r "$install_dir/slinky.cfg"
+for file in "${downloads[@]}"; do
+  echo "Downloading $download_location/$file"
+  curl -o- -# "$download_location/$file" > "$install_dir/$file"
+  chmod u+rx "$install_dir/$file"
+done
 
 echo "Creating Slinky command links for Windows use..."
 eval "$install_dir/slink" slink
 eval "$install_dir/slink" rmslink
 eval "$install_dir/slink" lsslink
+eval "$install_dir/slink" delslink
 
 echo "Finished installing Slinky!"
 echo
