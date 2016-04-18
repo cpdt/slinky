@@ -30,4 +30,4 @@ echo -e "set /p dirchange=<$dirchange_name\r" >> $file_name
 echo -e "if defined dirchange cd %dirchange%\r" >> $file_name
 chmod u=rwx,g=rx,o=r $file_name
 
-echo "$file_name ---> $1"
+echo "$file_name ---> $linux_command"
