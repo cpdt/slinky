@@ -8,10 +8,8 @@ if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
   delete_files=('slink' 'rmslink' 'lsslink' 'delslink'  'slinky-run.sh' 'relativepath.sh' 'slinky.cfg')
   for file in "${delete_files[@]}"; do
-    echo $run_file
-    file_path = "$(dirname $run_file)/$file"
-    echo "Deleting $file_path"
-    rm "$file_path"
+    echo "Deleting $(dirname $0)/$file"
+    rm "$(dirname $0)/$file"
   done
   echo "Deleting $install_dir/"
   rm -r $install_dir
