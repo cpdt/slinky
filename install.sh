@@ -2,7 +2,7 @@
 
 # Online installer - downloads required files from the Github repo
 install_dir="/usr/local/bin"
-download_location="https://raw.githubusercontent.com/cpdt/slinky/master"
+download_location="https://raw.githubusercontent.com/cpdt/slinky/1.1"
 
 echo "Starting Slinky download from $download_location"
 
