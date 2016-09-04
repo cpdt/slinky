@@ -87,7 +87,21 @@ $ delslink
 
 #### Usage in Bash
 
-Slinky commands are written as Bash script files, and so are available on the Bash shell. Slinky is actually used in order to provide these commands in the Windows command prompt.
+The Slinky commands can be used in Bash (or another shell). By default, they are installed in `/usr/local/bin`, so will be usable as long as this is in your path.
+
+#### Advanced Configuration
+
+##### Installation Path
+
+The installation path can be changed by modifying the `$install_dir` variable in `install.sh` or `install-local.sh` before they are run.
+
+##### Other Options
+
+Slinky provides a configuration file called `slinky.cfg` in the installation directory. This file has the following options:
+
+ - `install_dir` - the directory to place the link batch files as a Linux path. In order to use the linked commands in the Windows prompt, the Windows version of this path must be added to the PATH environment variable. Default is `/mnt/c/.slinky`.
+ - `run_file` - the Linux path to the bash script run by the link batch files. The script is called with the command line to run (i.e the command name followed by parameters). Note that this value is saved into each batch file, and so if the file is moved, the locations must be updated in each file. Default is `/usr/local/bin/slinky-run.sh`.
+ - `win_bash` - the Windows path to the bash executable (`bash.exe`). The command to run will be passed as the parameters. Note that this value is saved into each batch file, and so if the file is moved, the locations must be updated in each file. Default is `C:/Windows/System32/bash.exe`.
 
 ## License
 
