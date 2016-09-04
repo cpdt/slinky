@@ -14,7 +14,7 @@ Slinky allows you to run Linux commands in the Windows shell through the power o
 Open up Bash (hit Start, type `bash` and press [Enter]) and enter the following command (making sure that `curl` is installed first -- you can install it with `sudo apt-get install curl`).
 
 ```bash
-curl -o- https://raw.githubusercontent.com/cpdt/slinky/1.1/install.sh | /bin/bash
+curl -o- https://raw.githubusercontent.com/cpdt/slinky/1.2/install.sh | /bin/bash
 ```
 
 Slinky will automagically download and install, however to be able to run Slink-ed commands from Windows, you must add the following path to your Windows PATH variable (to edit the PATH variable, hit start, type `environment variables` and press [Enter], click `Environment variables...`, select `Path` in the top list, and hit `Edit`).
