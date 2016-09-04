@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $(dirname $0)/slinky.cfg
+source "$(dirname $0)/slinky.cfg"
 
 for filename in $install_dir/*.bat; do
   # second line in the file contains the command name after 'rem '
