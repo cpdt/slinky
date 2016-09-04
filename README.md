@@ -17,7 +17,7 @@ Open up Bash (hit Start, type `bash` and press [Enter]) and enter the following 
 curl -o- https://raw.githubusercontent.com/cpdt/slinky/1.1/install.sh | /bin/bash
 ```
 
-Slinky will automagically download and install, however to be able to run Slink-ed commands from Windows, you must add the following path to your Windows PATH variable (to edit the PATH variable, hit start, type `environment variables` and press [Enter], click `Environment variables...`, select `Path` in the top list, and hit `Edit`). Add the following path:
+Slinky will automagically download and install, however to be able to run Slink-ed commands from Windows, you must add the following path to your Windows PATH variable (to edit the PATH variable, hit start, type `environment variables` and press [Enter], click `Environment variables...`, select `Path` in the top list, and hit `Edit`).
 
 ```
 C:\.slinky
