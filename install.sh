@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Online installer - downloads required files from the Github repo
-version="1.1"
+version="1.2"
 install_dir="/usr/local/bin"
 download_location="https://raw.githubusercontent.com/cpdt/slinky/$version"
 
