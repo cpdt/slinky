@@ -17,4 +17,4 @@ linux_name=${command_line#'rem '}
 
 rm "$filename"
 
-echo "$filename -/-> $linux_name"
+echo -e "\e[36m$filename \e[0m-/-> \e[36m$linux_name\e[0m"

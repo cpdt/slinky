@@ -2,8 +2,8 @@
 
 source $(dirname $0)/slinky.cfg
 
-echo "This command will uninstall Slinky and remove any links that you have created."
-read -r -p "Are you sure you want to do this? [y/N] " response
+echo -e "\e[31;1mThis command will uninstall Slinky and remove any links that you have created."
+read -r -p $'\e[36;1mAre you sure you want to do this? \e[0m\e[33m[y/N]\e[0m : ' response
 if [[ $response =~ ^([yY][eE][sS]|[yY])$ ]]
 then
   delete_files=('slink' 'rmslink' 'lsslink' 'delslink'  'slinky-run.sh' 'relativepath.sh' 'slinky.cfg')
