@@ -41,8 +41,14 @@ do {
     $link_install_dir = Ask-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky"
     $slink_install_dir = Ask-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky"
     $command_prepend = Ask-Question "Text to prepend to Windows commands" ''
-    $add_path = Ask-Question 'Add link install directory to PATH?' 'Y/n'
 
+    # determine if the install directory is already in the PATH variable
+    $add_path = if ($env:Path.Split(';') -NotContains $link_install_dir) {
+        Ask-Question 'Add link install directory to PATH?' 'Y/n'
+    } else {
+        $in_path = True
+        'n'
+    } 
     $conf = "install_dir=`"$slink_install_dir`"`nrun_file=`"$install_dir/slinky-run.sh`"`nwin_bash=`"$bash_dir`""
 
     # convert slashes for paths 
@@ -118,7 +124,7 @@ if ($add_path_start -eq "y") {
 Write-Host "  Finished installing Slinky!" -ForegroundColor DarkGreen
 Write-Host ""
 Write-Host "NEXT STEPS:" -ForegroundColor Green
-if ($add_path_start -ne "y") {
+if ($add_path_start -ne "y" -And !$in_path) {
     Show-Step
     Write-Host "Add $link_install_dir to your PATH in Windows"
     $step_counter++
