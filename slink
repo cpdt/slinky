@@ -19,7 +19,7 @@ else
   linux_command=$2
 fi
 
-file_name="$install_dir/$1.bat"
+file_name="$install_dir/$command_prepend$1.bat"
 dirchange_name="%~dp0.dirchange"
 mkdir -p $install_dir
 echo -e "@echo off\r" > $file_name

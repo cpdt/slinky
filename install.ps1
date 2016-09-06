@@ -40,15 +40,23 @@ do {
     $install_dir = Ask-Question "Install directory (as Linux path)" '/usr/local/bin'
     $link_install_dir = Ask-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky"
     $slink_install_dir = Ask-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky"
+    $command_prepend = Ask-Question "Text to prepend to Windows commands" ''
     $add_path = Ask-Question 'Add link install directory to PATH?' 'Y/n'
 
     $conf = "install_dir=`"$slink_install_dir`"`nrun_file=`"$install_dir/slinky-run.sh`"`nwin_bash=`"$bash_dir`""
+
+    # convert slashes for paths 
+    $bash_dir = $bash_dir.replace('/', '\') # windows path
+    $install_dir = $install_dir.replace('\', '/') # linux path
+    $link_install_dir = $link_install_dir.replace('/', '\') # windows path
+    $slink_install_dir = $slink_install_dir.replace('\', '/') # linux path
 
     Write-Host ''
     Write-Host "Here's the contents of slinky.cfg:"
     Write-Conf "install_dir" $slink_install_dir
     Write-Conf "run_file" "$install_dir/slinky-run.sh"
     Write-Conf "win_bash" $bash_dir
+    Write-Conf "command_prepend" $command_prepend
     $conf_ok = Ask-Question 'Is this okay?' 'Y/n'
 } while ($conf_ok.Substring(0, 1).ToLower() -ne "y")
 
@@ -83,6 +91,7 @@ Invoke-Bash "echo -e `"install_dir=\`"$slink_install_dir\`"`" > `"$install_dir/s
 Invoke-Bash "echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install_dir/slinky.cfg`""
  # path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
 Invoke-Bash "echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
 
 Write-Host "  Creating Slinky command links for Windows use (if any of these fail, Slinky is not installed)" -ForegroundColor DarkGreen
 # slink the actual slink commands so they are accessible from the Windows prompt, as they are implemented as shell scripts
