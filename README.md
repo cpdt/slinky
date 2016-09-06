@@ -4,23 +4,27 @@
 
 ![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
 
-Slinky allows you to run Linux commands in the Windows shell through the power of Ubuntu for Windows. Instead of having to open up `bash` whenever you need to bash out some scripts, Slinky lets you run those commands straight in your Windows command prompt.
+Slinky allows you to run Linux commands in the Windows shell - instead of having to open up a Bash Windows implementation whenever you need to bash out some scripts, Slinky lets you run those commands straight from your Windows (or Powershell) command prompt.
 
-
-**You will need Windows build 14316 or later in order to use Slinky** (this is the first build that includes a usable version of Ubuntu for Windows). This either means you must be running the Aniversary update (or later), or a build after 14316 in the fast ring.
+**Slinky requires an implementation of `bash` to be installed on your computer.** If you're running the Windows 10 Aniversary update or later, you can [use the in-built Ubuntu for Windows bash](http://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/). Otherwise, install an alternate tool such as [Git Bash](https://git-for-windows.github.io/)/[MSYS Bash](http://www.mingw.org/wiki/msys) or [Cygwin](https://www.cygwin.com/).
 
 ## Install
 
-Open up Bash (hit Start, type `bash` and press [Enter]) and enter the following command (making sure that `curl` is installed first -- you can install it with `sudo apt-get install curl`).
+All of the scripts below download a Powershell script and execute it on your machine.
 
-```bash
-curl -o- https://raw.githubusercontent.com/cpdt/slinky/1.2/install.sh | /bin/bash
+**Cmd.exe**
+```
+@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1'))"
 ```
 
-Slinky will automagically download and install, however to be able to run Slink-ed commands from Windows, you must add the following path to your Windows PATH variable (to edit the PATH variable, hit start, type `environment variables` and press [Enter], click `Environment variables...`, select `Path` in the top list, and hit `Edit`).
-
+**Powershell.exe** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
 ```
-C:\.slinky
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1'))
+```
+
+**Powershell v3+** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
+```
+iwr https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1 -UseBasicParsing | iex
 ```
 
 ## Usage
@@ -88,20 +92,6 @@ $ delslink
 #### Usage in Bash
 
 The Slinky commands can be used in Bash (or another shell). By default, they are installed in `/usr/local/bin`, so will be usable as long as this is in your path.
-
-#### Advanced Configuration
-
-##### Installation Path
-
-The installation path can be changed by modifying the `$install_dir` variable in `install.sh` or `install-local.sh` before they are run.
-
-##### Other Options
-
-Slinky provides a configuration file called `slinky.cfg` in the installation directory. This file has the following options:
-
- - `install_dir` - the directory to place the link batch files as a Linux path. In order to use the linked commands in the Windows prompt, the Windows version of this path must be added to the PATH environment variable. Default is `/mnt/c/.slinky`.
- - `run_file` - the Linux path to the bash script run by the link batch files. The script is called with the command line to run (i.e the command name followed by parameters). Note that this value is saved into each batch file, and so if the file is moved, the locations must be updated in each file. Default is `/usr/local/bin/slinky-run.sh`.
- - `win_bash` - the Windows path to the bash executable (`bash.exe`). The command to run will be passed as the parameters. Note that this value is saved into each batch file, and so if the file is moved, the locations must be updated in each file. Default is `C:/Windows/System32/bash.exe`.
 
 ## License
 
