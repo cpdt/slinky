@@ -2,7 +2,7 @@
 
 > **Super Link, Yo** - Run native Linux commands from your Windows shell!
 
-![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
+![Using Slinky with vim](http://i.imgur.com/X0to4NL.gif)
 
 Slinky allows you to run Linux commands in the Windows shell - instead of having to open up a Bash Windows implementation whenever you need to bash out some scripts, Slinky lets you run those commands straight from your Windows (or Powershell) command prompt.
 
