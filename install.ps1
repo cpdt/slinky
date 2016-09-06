@@ -1,6 +1,6 @@
 # config for installation
 $installer_ver = "2.0"
-$slinky_ver = "1.2"
+$slinky_ver = "1.3"
 $download_location = "https://raw.githubusercontent.com/cpdt/slinky/$slinky_ver"
 
 $step_counter = 1
