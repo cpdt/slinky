@@ -46,7 +46,7 @@ do {
     $add_path = if ($env:Path.Split(';') -NotContains $link_install_dir) {
         Ask-Question 'Add link install directory to PATH?' 'Y/n'
     } else {
-        $in_path = True
+        $in_path = 'True'
         'n'
     } 
     $conf = "install_dir=`"$slink_install_dir`"`nrun_file=`"$install_dir/slinky-run.sh`"`nwin_bash=`"$bash_dir`""
@@ -124,7 +124,7 @@ if ($add_path_start -eq "y") {
 Write-Host "  Finished installing Slinky!" -ForegroundColor DarkGreen
 Write-Host ""
 Write-Host "NEXT STEPS:" -ForegroundColor Green
-if ($add_path_start -ne "y" -And !$in_path) {
+if ($add_path_start -ne "y" -And $in_path -ne 'True') {
     Show-Step
     Write-Host "Add $link_install_dir to your PATH in Windows"
     $step_counter++
