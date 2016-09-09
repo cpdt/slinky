@@ -8,8 +8,10 @@ function Read-Question {
 
 Write-Host "Loading versions..."
 
-$tags = Invoke-WebRequest -Uri 'https://api.github.com/repos/cpdt/slinky/tags' | ConvertFrom-Json
-$branches = Invoke-WebRequest -Uri 'https://api.github.com/repos/cpdt/slinky/branches' | ConvertFrom-Json
+$client = New-Object System.Net.WebClient
+
+$tags = $client.DownloadString('https://api.github.com/repos/cpdt/slinky/tags') | ConvertFrom-Json
+$branches = $client.DownloadString('https://api.github.com/repos/cpdt/slinky/branches') | ConvertFrom-Json
 
 $options = ($tags + $branches) | % {$_.name}
 
@@ -26,8 +28,6 @@ do {
 } while (!$is_valid)
 
 $root_url = "https://raw.githubusercontent.com/cpdt/slinky/$install_ver"
-
-$client = New-Object System.Net.WebClient
 
 try {
     $installer_content = $client.DownloadString("$root_url/install-version.ps1")
