@@ -89,7 +89,7 @@ Invoke-Bash "echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install
  # path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
 Invoke-Bash "echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
 Invoke-Bash "echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
-Invoke-Bash "echo -e `"use_color=true`""
+Invoke-Bash "echo -e `"use_color=true`" >> `"$install_dir/slinky.cfg`""
 
 Write-Host "  Creating Slinky command links for Windows use (if any of these fail, Slinky is not installed)" -ForegroundColor DarkGreen
 # slink the actual slink commands so they are accessible from the Windows prompt, as they are implemented as shell scripts
