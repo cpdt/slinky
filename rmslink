@@ -2,19 +2,35 @@
 
 source "$(dirname $0)/slinky.cfg"
 
-if [ $# -lt 1 ]
+# command-line parsing
+for param in "$@"
+do
+  case "$param" in
+    "-p") no_color=1;;
+    *   ) win_command=$param;;
+  esac
+done
+
+if [ -z "$win_command" ]
 then
   echo "Usage: rmslink [win command]"
   echo ""
   echo "Remove the link between [win command] and a Bash for Windows command."
+  echo ""
+  echo "  -p    Disable colorized output."
   exit 1
 fi
 
-filename="$install_dir/$1.bat"
+filename="$install_dir/$win_command.bat"
 
 command_line=$(tail -n+2 $filename | head -n1)
 linux_name=${command_line#'rem '}
 
 rm "$filename"
 
-echo -e "\e[36m$filename \e[0m-/-> \e[36m$linux_name\e[0m"
+if [ $no_color ]
+then
+  echo "$filename -/-> $linux_name"
+else
+  echo -e "\e[36m$filename \e[0m-/-> \e[36m$linux_name\e[0m"
+fi
