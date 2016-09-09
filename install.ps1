@@ -76,7 +76,7 @@ Write-Host "  Ensuring curl is installed" -ForegroundColor DarkGreen
 Invoke-Bash "apt-get install curl"
 
 # iterate through each file to download, use curl to place it in the correct location, and ensure permissions are correct
-$downloads = 'slink', 'rmslink', 'lsslink', 'delslink', 'slinky-run.sh', 'relativepath.sh', 'install-common.sh'
+$downloads = 'slink', 'rmslink', 'lsslink', 'delslink', 'slinky-run.sh', 'relativepath.sh'
 foreach ($download in $downloads) {
     Write-Host -NoNewline "  Downloading " -ForegroundColor DarkGreen
     Write-Host -NoNewline "$download_location/$download" -ForegroundColor DarkCyan
