@@ -22,7 +22,7 @@ function Show-Step {
 }
 
 Write-Host ''
-Write-Host "Welcome to the Slinky v$install_ver installation script"
+Write-Host "Welcome to the Slinky ($install_ver) installation script"
 
 # repeat running until the user says its okay
 do {
