@@ -28,7 +28,7 @@ linux_name=${command_line#'rem '}
 
 rm "$filename"
 
-if [ $no_color ]
+if [ $no_color ] || [ $use_color != true ]
 then
   echo "$filename -/-> $linux_name"
 else

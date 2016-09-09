@@ -17,7 +17,7 @@ function Read-Question {
 function Write-Conf {
     Write-Host -NoNewline "  $($args[0])" -ForegroundColor Green
     Write-Host -NoNewline '=' -ForegroundColor DarkGray
-    Write-Host "`"$($args[1])`"" -ForegroundColor DarkCyan
+    Write-Host $args[1] -ForegroundColor DarkCyan
 }
 
 # invokes a bash command passed as the first parameter
@@ -59,10 +59,11 @@ do {
 
     Write-Host ''
     Write-Host "Here's the contents of slinky.cfg:"
-    Write-Conf "install_dir" $slink_install_dir
-    Write-Conf "run_file" "$install_dir/slinky-run.sh"
-    Write-Conf "win_bash" $bash_dir
-    Write-Conf "command_prepend" $command_prepend
+    Write-Conf "install_dir" "`"$slink_install_dir`""
+    Write-Conf "run_file" "`"$install_dir/slinky-run.sh`""
+    Write-Conf "win_bash" "`"$bash_dir`""
+    Write-Conf "command_prepend" "`"$command_prepend`""
+    Write-Conf "use_color" "true"
     $conf_ok = Read-Question 'Is this okay?' 'Y/n'
 } while ($conf_ok.Substring(0, 1).ToLower() -ne "y")
 
@@ -98,6 +99,7 @@ Invoke-Bash "echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install
  # path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
 Invoke-Bash "echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
 Invoke-Bash "echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"use_color=true`""
 
 Write-Host "  Creating Slinky command links for Windows use (if any of these fail, Slinky is not installed)" -ForegroundColor DarkGreen
 # slink the actual slink commands so they are accessible from the Windows prompt, as they are implemented as shell scripts
