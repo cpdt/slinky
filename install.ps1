@@ -6,7 +6,7 @@ $download_location = "https://raw.githubusercontent.com/cpdt/slinky/$slinky_ver"
 $step_counter = 1
 
 # asks a question - first parameter is the question, second is the default value (for if the user leaves it empty)
-function Ask-Question {
+function Read-Question {
     Write-Host -NoNewline $args[0] -ForegroundColor Cyan
     Write-Host -NoNewline " [$($args[1])]" -ForegroundColor DarkYellow
     $in = Read-Host -prompt ' '
@@ -36,15 +36,15 @@ Write-Host "Welcome to the Slinky $slinky_ver installation script (v$installer_v
 
 # repeat running until the user says its okay
 do {
-    $bash_dir = Ask-Question "Bash executable path (as Windows path)" (where.exe 'bash' | Select -First 1)
-    $install_dir = Ask-Question "Install directory (as Linux path)" '/usr/local/bin'
-    $link_install_dir = Ask-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky"
-    $slink_install_dir = Ask-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky"
-    $command_prepend = Ask-Question "Text to prepend to Windows commands" ''
+    $bash_dir = Read-Question "Bash executable path (as Windows path)" (where.exe 'bash' | Select -First 1)
+    $install_dir = Read-Question "Install directory (as Linux path)" '/usr/local/bin'
+    $link_install_dir = Read-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky"
+    $slink_install_dir = Read-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky"
+    $command_prepend = Read-Question "Text to prepend to Windows commands" ''
 
     # determine if the install directory is already in the PATH variable
     $add_path = if ($env:Path.Split(';') -NotContains $link_install_dir) {
-        Ask-Question 'Add link install directory to PATH?' 'Y/n'
+        Read-Question 'Add link install directory to PATH?' 'Y/n'
     } else {
         $in_path = 'True'
         'n'
@@ -63,7 +63,7 @@ do {
     Write-Conf "run_file" "$install_dir/slinky-run.sh"
     Write-Conf "win_bash" $bash_dir
     Write-Conf "command_prepend" $command_prepend
-    $conf_ok = Ask-Question 'Is this okay?' 'Y/n'
+    $conf_ok = Read-Question 'Is this okay?' 'Y/n'
 } while ($conf_ok.Substring(0, 1).ToLower() -ne "y")
 
 Write-Host ''
