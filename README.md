@@ -2,7 +2,7 @@
 
 > **Super Link, Yo** - Run native Linux commands from your Windows shell!
 
-![Using Slinky with Nano](http://i.imgur.com/RLFtEEb.gif)
+![Using Slinky with vim](http://i.imgur.com/jcrOFYF.gif)
 
 Slinky allows you to run Linux commands in the Windows shell - instead of having to open up a Bash Windows implementation whenever you need to bash out some scripts, Slinky lets you run those commands straight from your Windows (or Powershell) command prompt.
 
@@ -14,17 +14,17 @@ All of the scripts below download a Powershell script and execute it on your mac
 
 **Cmd.exe**
 ```
-@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1'))"
+@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1'))"
 ```
 
 **Powershell.exe** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
 ```
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1'))
 ```
 
 **Powershell v3+** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
 ```
-iwr https://raw.githubusercontent.com/cpdt/slinky/1.3/install.ps1 -UseBasicParsing | iex
+iwr https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1 -UseBasicParsing | iex
 ```
 
 ## Usage

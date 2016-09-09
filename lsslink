@@ -6,6 +6,12 @@ for filename in $install_dir/*.bat; do
   # second line in the file contains the command name after 'rem '
   command_line=$(tail -n+2 $filename | head -n1)
   linux_name=${command_line#'rem '}
-  echo "$filename ---> $linux_name"
+
+  if [ "$1" = "-p" || "$use_color" != true ]
+  then
+    echo "$filename ---> $linux_name"
+  else
+    echo -e "\e[36m$filename \e[0m---> \e[36m$linux_name\e[0m"
+  fi
 done
 
