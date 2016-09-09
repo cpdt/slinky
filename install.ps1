@@ -10,8 +10,17 @@ Write-Host "Loading versions..."
 
 $client = New-Object System.Net.WebClient
 
-$tags = $client.DownloadString('https://api.github.com/repos/cpdt/slinky/tags') | ConvertFrom-Json
-$branches = $client.DownloadString('https://api.github.com/repos/cpdt/slinky/branches') | ConvertFrom-Json
+try {
+    $tags = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/tags' | ConvertFrom-Json
+    $branches = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/branches' | ConvertFrom-Json
+} catch [System.Net.WebException] {
+    Write-Host ""
+    Write-Host "Oops!" -ForegroundColor Red
+    Write-Host "Couldn't fetch the list of versions. You may not be connected to the internet, or Github may be down." -ForegroundColor Red
+    Write-Host "Error details:" -ForegroundColor Red
+    Write-Host (ConvertFrom-Json $_).message -ForegroundColor Red
+    exit
+}
 
 $options = ($tags + $branches) | % {$_.name}
 
