@@ -1,6 +1,7 @@
 param(
     [string]$v = $false,
     [switch]$h = $false,
+    [switch]$auto = $false,
     [string]$bash_exe = $false,
     [string]$install_dir = $false,
     [string]$win_link_dir = $false,
