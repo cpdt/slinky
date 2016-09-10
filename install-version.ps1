@@ -1,4 +1,4 @@
-if (!(Test-Path variable:global:install_ver)) {
+if (!(Get-Variable install_ver -ErrorAction SilentlyContinue)) {
     $install_ver = 'master' # download master (usually latest version) if not set
 }
 
