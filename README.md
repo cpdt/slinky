@@ -89,9 +89,15 @@ Tired of being awesome and want to go back to being a regular command-prompt use
 $ delslink
 ```
 
-#### Usage in Bash
+## FAQ
 
-The Slinky commands can be used in Bash (or another shell). By default, they are installed in `/usr/local/bin`, so will be usable as long as this is in your path.
+**Can I create/remove/list Slinky links from the Bash shell?**
+
+Yes - the Slinky commands are actually Bash script files, installed by default in `/usr/local/bin`. As a result, these commands will be available in the Bash shell as long as this installation directory is in your PATH.
+
+**Why does the GIF show vim being opened? Is slinky only for vim users?**
+
+Now you're just reading too far into the GIF :wink:. Vim is being used simply to demonstrate what Slinky does, but this doesn't mean you can't run `slink emacs` or `slink nano` or even `slink ed` and enjoy your favourite terminal editor on Windows.
 
 ## License
 

@@ -1,7 +1,19 @@
+if (!(Test-Path variable:global:install_ver)) {
+    $install_ver = 'master' # download master (usually latest version) if not set
+}
+
 # config for installation
 $download_location = "https://raw.githubusercontent.com/cpdt/slinky/$install_ver"
 
 $step_counter = 1
+
+# asks a question - first parameter is the question, second is the default value (for if the user leaves it empty)
+function Read-Question {
+    Write-Host -NoNewline $args[0] -ForegroundColor Cyan
+    Write-Host -NoNewline " [$($args[1])]" -ForegroundColor DarkYellow
+    $in = Read-Host -prompt ' '
+    if ($in) { $in } else { $args[1] }
+}
 
 # displays a coloured configuration property - first parameter is the property name, second is the value
 function Write-Conf {
@@ -12,8 +24,16 @@ function Write-Conf {
 
 # invokes a bash command passed as the first parameter
 function Invoke-Bash {
-    $command = $args[0].Replace('"', '`"')
-    iex "`"$command`" | &`"$bash_dir`""
+    $p = New-Object System.Diagnostics.Process
+    $p.StartInfo.FileName = $bash_dir
+    $p.StartInfo.UseShellExecute = $false
+    $p.StartInfo.RedirectStandardInput = $true
+    $p.Start() > $null
+
+    $p.StandardInput.Write("$($args[0])`n")
+    $p.StandardInput.Close()
+    $p.WaitForExit()
+    # todo: could return exit code here to determine if it failed
 }
 
 # shows a list number
@@ -63,7 +83,10 @@ Write-Host $download_location -ForegroundColor DarkCyan
 Write-Host "  Ensuring curl is installed" -ForegroundColor DarkGreen
 # the installation requires curl in bash, so install it here - some implementations (e.g. Cygwin and Git Bash) don't provide apt-get, meaning this line will fail.
 # most of them include curl anyway, so everything else should be fine.
-Invoke-Bash "apt-get install curl"
+Invoke-Bash "apt-get install curl -y"
+
+# make sure the installation path exists
+Invoke-Bash "mkdir -p `"$install_dir`""
 
 # iterate through each file to download, use curl to place it in the correct location, and ensure permissions are correct
 $downloads = 'slink', 'rmslink', 'lsslink', 'delslink', 'slinky-run.sh', 'relativepath.sh'
@@ -80,7 +103,7 @@ foreach ($download in $downloads) {
 }
 
 # create the .dirchange file, used to update the current directory on windows if the bash one changes
-Invoke-Bash "echo -e `"`" > `"$slink_install_dir/.dirchange`""
+Invoke-Bash "touch `"$slink_install_dir/.dirchange`""
 
 Write-Host "  Writing configuration file" -ForegroundColor DarkGreen
 # again writing to the files with bash as we do not necessarily have access to these files from Windows
