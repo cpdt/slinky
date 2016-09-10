@@ -1,5 +1,12 @@
 param(
-    [string]$v = ""
+    [string]$v = $false,
+    [switch]$h = $false,
+    [string]$bash_exe = $false,
+    [string]$install_dir = $false,
+    [string]$win_link_dir = $false,
+    [string]$linux_link_dir = $false,
+    [string]$command_prepend = $false,
+    [string]$allow_path = $false
 )
 
 # asks a question - first parameter is the question, second is the default value (for if the user leaves it empty)
@@ -28,7 +35,7 @@ try {
 
 $options = ($tags + $branches) | % {$_.name}
 
-$install_ver = if ($v) {
+$install_ver = if ($v -ne $false) {
     if (!$options.Contains($v)) {
         Write-Host "Unknown version $v"
         exit 1

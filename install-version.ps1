@@ -1,5 +1,37 @@
+param(
+    [switch]$h = $false,
+    [switch]$auto = $false,
+    [string]$bash_exe = $false,
+    [string]$install_dir = $false,
+    [string]$win_link_dir = $false,
+    [string]$linux_link_dir = $false,
+    [string]$command_prepend = $false,
+    [string]$allow_path = $false
+)
+
 if (!(Get-Variable install_ver -ErrorAction SilentlyContinue)) {
     $install_ver = 'master' # download master (usually latest version) if not set
+}
+
+if ($h) {
+    Write-Host "Usage: install-version [-h] [-auto] [-bash_exe <path>] [-install_dir <path>]"
+    Write-Host "                       [-win_link_dir <path>] [-linux_link_dir <path>]"
+    Write-Host "                       [-command_prepend <val>] [-allow_path <y/n>]"
+    Write-Host ""
+    Write-Host "Installs Slinky ($install_ver) on the system. Any parameters not provided are prompted for"
+    Write-Host "before beginning installation."
+    Write-Host ""
+    Write-Host "  -h                  Display this help message."
+    Write-Host "  -auto               Just install it, no questions asked - uses default parameters if they"
+    Write-Host "                      are not provided with the command."
+    Write-Host "  -bash_exe           The (Windows) path to the Bash executable to use."
+    Write-Host "  -install_dir        The (Linux) directory to download and install the scripts to."
+    Write-Host "  -win_link_dir       The (Windows) directory to place the link batch files."
+    Write-Host "  -linux_link_dir     Same as win_link_dir, but as a Linux path."
+    Write-Host "  -command_prepend    A value to prepend to all slinked commands (allows multiple installs)."
+    Write-Host "  -allow_path         Whether to add the win_link_dir to Windows' PATH variable (requires"
+    Write-Host "                      admin privileges)."
+    exit 1
 }
 
 # config for installation
@@ -9,10 +41,26 @@ $step_counter = 1
 
 # asks a question - first parameter is the question, second is the default value (for if the user leaves it empty)
 function Read-Question {
-    Write-Host -NoNewline $args[0] -ForegroundColor Cyan
-    Write-Host -NoNewline " [$($args[1])]" -ForegroundColor DarkYellow
-    $in = Read-Host -prompt ' '
-    if ($in) { $in } else { $args[1] }
+    param(
+        [string]$question,
+        [string]$default,
+        [string]$PassedVal = $false
+    )
+
+    if ($auto) {
+        if ($PassedVal -eq $false) { $default } else { $PassedVal }
+    } else {
+        Write-Host -NoNewline $question -ForegroundColor Cyan
+        Write-Host -NoNewline " [$default]" -ForegroundColor DarkYellow
+
+        if ($PassedVal -eq $false) {
+            $in = Read-Host -prompt ' '
+            if ($in) { $in } else { $default }
+        } else {
+            Write-Host " : $PassedVal"
+            $PassedVal
+        }
+    }
 }
 
 # displays a coloured configuration property - first parameter is the property name, second is the value
@@ -59,15 +107,15 @@ Write-Host "Welcome to the Slinky ($install_ver) installation script"
 
 # repeat running until the user says its okay
 do {
-    $bash_dir = Read-Question "Bash executable path (as Windows path)" (where.exe 'bash' | Select -First 1)
-    $install_dir = Read-Question "Install directory (as Linux path)" '/usr/local/bin'
-    $link_install_dir = Read-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky"
-    $slink_install_dir = Read-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky"
-    $command_prepend = Read-Question "Text to prepend to Windows commands" ''
+    $bash_dir = Read-Question "Bash executable path (as Windows path)" (where.exe 'bash' | Select -First 1) -PassedVal $bash_exe
+    $install_dir = Read-Question "Install directory (as Linux path)" '/usr/local/bin' -PassedVal $install_dir
+    $link_install_dir = Read-Question "Link install directory (as Windows path)" "$env:systemdrive\.slinky" -PassedVal $win_link_dir
+    $slink_install_dir = Read-Question "Link install directory (as Linux path)" "/mnt/$($env:systemdrive.Substring(0, 1).ToLower())/.slinky" -PassedVal $linux_link_dir
+    $command_prepend = Read-Question "Text to prepend to Windows commands" '' -PassedVal $command_prepend
 
     # determine if the install directory is already in the PATH variable
     $add_path = if ($env:Path.Split(';') -NotContains $link_install_dir) {
-        Read-Question 'Add link install directory to PATH? (requires admin privileges)' 'Y/n'
+        Read-Question 'Add link install directory to PATH? (requires admin privileges)' 'Y/n' -PassedVal $allow_path
     } else {
         $in_path = 'True'
         'n'
