@@ -1,14 +1,3 @@
-param(
-    [switch]$h = $false,
-    [switch]$auto = $false,
-    [string]$bash_exe = $false,
-    [string]$install_dir = $false,
-    [string]$win_link_dir = $false,
-    [string]$linux_link_dir = $false,
-    [string]$command_prepend = $false,
-    [string]$allow_path = $false
-)
-
 if (!(Get-Variable install_ver -ErrorAction SilentlyContinue)) {
     $install_ver = 'master' # download master (usually latest version) if not set
 }
