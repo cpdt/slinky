@@ -1,3 +1,7 @@
+param(
+    [string]$v = ""
+)
+
 # asks a question - first parameter is the question, second is the default value (for if the user leaves it empty)
 function Read-Question {
     Write-Host -NoNewline $args[0] -ForegroundColor Cyan
@@ -24,17 +28,29 @@ try {
 
 $options = ($tags + $branches) | % {$_.name}
 
-do {
-    Write-Host ""
-    Write-Host -NoNewline "Available versions: "
-    Write-Host ($options -join ', ') -ForegroundColor DarkYellow
-    $install_ver = (Read-Question "Version to install" $options[0]).ToLower()
-
-    $is_valid = $options.Contains($install_ver)
-    if (!$is_valid) {
-        Write-Host "Please provide a valid version." -ForegroundColor Red
+$install_ver = if ($v) {
+    if (!$options.Contains($v)) {
+        Write-Host "Unknown version $v"
+        exit 1
     }
-} while (!$is_valid)
+    $v
+} else {
+    do {
+        Write-Host ""
+        Write-Host -NoNewline "Available versions: "
+        Write-Host ($options -join ', ') -ForegroundColor DarkYellow
+        $entered_ver = (Read-Question "Version to install" $options[0]).ToLower()
+
+        $is_valid = $options.Contains($entered_ver)
+        if (!$is_valid) {
+            Write-Host "Please provide a valid version." -ForegroundColor Red
+        }
+    } while (!$is_valid)
+
+    $entered_ver
+}
+
+Write-Host "Downloading installer for $install_ver"
 
 $root_url = "https://raw.githubusercontent.com/cpdt/slinky/$install_ver"
 
