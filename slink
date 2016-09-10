@@ -43,6 +43,11 @@ echo -e "set /p dirchange=<$dirchange_name\r" >> $file_name
 echo -e "if defined dirchange cd %dirchange%\r" >> $file_name
 chmod u=rwx,g=rx,o=r $file_name
 
+if [ $? -ne 0 ]
+then
+  exit 1
+fi
+
 if [ $no_color ] || [ "$use_color" != true ]
 then
   echo -e "$file_name ---> $linux_command"
