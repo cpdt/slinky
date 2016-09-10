@@ -67,7 +67,7 @@ do {
 
     # determine if the install directory is already in the PATH variable
     $add_path = if ($env:Path.Split(';') -NotContains $link_install_dir) {
-        Read-Question 'Add link install directory to PATH?' 'Y/n'
+        Read-Question 'Add link install directory to PATH? (requires admin privileges)' 'Y/n'
     } else {
         $in_path = 'True'
         'n'
@@ -138,7 +138,7 @@ Invoke-Bash "`"$install_dir/slink`" delslink `"$install_dir/delslink`""
 # update the system environment variable if told to
 $add_path_start = $add_path.Substring(0, 1).ToLower()
 if ($add_path_start -eq "y") {
-    Write-Host "  Adding link install directory to PATH"
+    Write-Host "  Adding link install directory to PATH" -ForegroundColor DarkGreen
     $new_path = "$env:Path;$link_install_dir"
     [Environment]::SetEnvironmentVariable("Path", $new_path, [EnvironmentVariableTarget]::Machine)
     # update the in-memory path variable in the hopes that this will prevent the need for a terminal re-start
