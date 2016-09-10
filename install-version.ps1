@@ -24,16 +24,29 @@ function Write-Conf {
 
 # invokes a bash command passed as the first parameter
 function Invoke-Bash {
+    param($command, $DieOnError = $true)
+
     $p = New-Object System.Diagnostics.Process
     $p.StartInfo.FileName = $bash_dir
     $p.StartInfo.UseShellExecute = $false
     $p.StartInfo.RedirectStandardInput = $true
     $p.Start() > $null
 
-    $p.StandardInput.Write("$($args[0])`n")
+    $p.StandardInput.Write("$command`n")
     $p.StandardInput.Close()
     $p.WaitForExit()
-    # todo: could return exit code here to determine if it failed
+
+    if ($p.ExitCode -ne 0) {
+        Write-Host -NoNewline "Failed to run " -ForegroundColor Red
+        Write-Host -NoNewline $command -ForegroundColor Yellow
+        if ($DieOnError -eq $true) {
+            Write-Host " - Slinky is NOT installed." -ForegroundColor Red
+            Write-Host "Installation cannot continue, and has been aborted." -ForegroundColor Red
+            exit 1
+        } else {
+            Write-Host ", continuing anyway" -ForegroundColor Red
+        }
+    }
 }
 
 # shows a list number
@@ -83,7 +96,7 @@ Write-Host $download_location -ForegroundColor DarkCyan
 Write-Host "  Ensuring curl is installed" -ForegroundColor DarkGreen
 # the installation requires curl in bash, so install it here - some implementations (e.g. Cygwin and Git Bash) don't provide apt-get, meaning this line will fail.
 # most of them include curl anyway, so everything else should be fine.
-Invoke-Bash "apt-get install curl -y"
+Invoke-Bash "apt-get install curl -y" -DieOnError $false
 
 # make sure the installation path exists
 Invoke-Bash "mkdir -p `"$install_dir`""
@@ -103,27 +116,24 @@ foreach ($download in $downloads) {
 }
 
 # create the .dirchange file, used to update the current directory on windows if the bash one changes
+Invoke-Bash "mkdir -p `"$slink_install_dir`""
 Invoke-Bash "touch `"$slink_install_dir/.dirchange`""
 
 Write-Host "  Writing configuration file" -ForegroundColor DarkGreen
 # again writing to the files with bash as we do not necessarily have access to these files from Windows
 Invoke-Bash "echo -e `"install_dir=\`"$slink_install_dir\`"`" > `"$install_dir/slinky.cfg`""
 Invoke-Bash "echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install_dir/slinky.cfg`""
- # path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
+# path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
 Invoke-Bash "echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
 Invoke-Bash "echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
 Invoke-Bash "echo -e `"use_color=true`" >> `"$install_dir/slinky.cfg`""
 
 Write-Host "  Creating Slinky command links for Windows use (if any of these fail, Slinky is not installed)" -ForegroundColor DarkGreen
 # slink the actual slink commands so they are accessible from the Windows prompt, as they are implemented as shell scripts
-Invoke-Bash "bash `"$install_dir/slink`" slink `"$install_dir/slink`""
-Invoke-Bash "bash `"$install_dir/slink`" rmslink `"$install_dir/rmslink`""
-Invoke-Bash "bash `"$install_dir/slink`" lsslink `"$install_dir/lsslink`""
-Invoke-Bash "bash `"$install_dir/slink`" delslink `"$install_dir/delslink`""
-
-# attempting to run the 'slink' command above to link the slinky commands tests the whole system to make sure everything is working - if these fail, the installation
-# is broken
-Write-Host "WARNING: If any of the operations just above (after the last status message) failed to run, Slinky is NOT installed. The provided location for bash may be incorrect, or a path may not exist." -ForegroundColor Red
+Invoke-Bash "`"$install_dir/slink`" slink `"$install_dir/slink`""
+Invoke-Bash "`"$install_dir/slink`" rmslink `"$install_dir/rmslink`""
+Invoke-Bash "`"$install_dir/slink`" lsslink `"$install_dir/lsslink`""
+Invoke-Bash "`"$install_dir/slink`" delslink `"$install_dir/delslink`""
 
 # update the system environment variable if told to
 $add_path_start = $add_path.Substring(0, 1).ToLower()
