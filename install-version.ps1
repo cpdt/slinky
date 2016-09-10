@@ -36,19 +36,19 @@ function Read-Question {
         [string]$PassedVal = $false
     )
 
-    if ($auto) {
-        if ($PassedVal -eq $false) { $default } else { $PassedVal }
-    } else {
-        Write-Host -NoNewline $question -ForegroundColor Cyan
-        Write-Host -NoNewline " [$default]" -ForegroundColor DarkYellow
+    if ($auto -And $PassedVal -eq $false) {
+        $PassedVal = $default
+    }
 
-        if ($PassedVal -eq $false) {
-            $in = Read-Host -prompt ' '
-            if ($in) { $in } else { $default }
-        } else {
-            Write-Host " : $PassedVal"
-            $PassedVal
-        }
+    Write-Host -NoNewline $question -ForegroundColor Cyan
+    Write-Host -NoNewline " [$default]" -ForegroundColor DarkYellow
+
+    if ($PassedVal -eq $false) {
+        $in = Read-Host -prompt ' '
+        if ($in) { $in } else { $default }
+    } else {
+        Write-Host " : $PassedVal"
+        $PassedVal
     }
 }
 
