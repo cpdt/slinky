@@ -23,8 +23,8 @@ Write-Host "Loading versions..."
 $client = New-Object System.Net.WebClient
 
 try {
-    $tags = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/tags' | ConvertFrom-Json
-    $branches = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/branches' | ConvertFrom-Json
+    $tags = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/tags' -UseBasicParsing | ConvertFrom-Json
+    $branches = Invoke-WebRequest 'https://api.github.com/repos/cpdt/slinky/branches' -UseBasicParsing | ConvertFrom-Json
 } catch [System.Net.WebException] {
     Write-Host ""
     Write-Host "Oops!" -ForegroundColor Red
