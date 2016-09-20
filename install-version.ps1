@@ -63,27 +63,29 @@ function Write-Conf {
 function Invoke-Bash {
     param($command, $DieOnError = $true)
 
-    $p = New-Object System.Diagnostics.Process
-    $p.StartInfo.FileName = $bash_dir
-    $p.StartInfo.UseShellExecute = $false
-    $p.StartInfo.RedirectStandardInput = $true
-    $p.StartInfo.Verb = "runas"
-    $p.Start() > $null
-
-    $p.StandardInput.Write("$command`n")
-    $p.StandardInput.Close()
-    $p.WaitForExit()
-
-    if ($p.ExitCode -ne 0) {
-        Write-Host -NoNewline "Failed to run " -ForegroundColor Red
+    function Write-Error {
+        Write-Host -NoNewline "  Failed to run " -ForegroundColor Red
         Write-Host -NoNewline $command -ForegroundColor Yellow
+        Write-Host " (error: $($args[0]))" -ForegroundColor Red
         if ($DieOnError -eq $true) {
-            Write-Host " - Slinky is NOT installed." -ForegroundColor Red
-            Write-Host "Installation cannot continue, and has been aborted." -ForegroundColor Red
+            Write-Host "  Slinky is NOT installed." -ForegroundColor Red
+            Write-Host "  Installation cannot continue, and has been aborted." -ForegroundColor Red
             exit 1
         } else {
-            Write-Host ", continuing anyway" -ForegroundColor Red
+            Write-Host "  Continuing anyway" -ForegroundColor Red
         }
+    }
+
+    # write the command to a file accessible by both Windows and Linux
+    try {
+        $command | Set-Content "$install_temp_dir\command.sh"
+        &$bash_dir "`"$slink_install_dir/.installer/command.sh`""
+
+        if ($LASTEXITCODE -ne 0) {
+            Write-Error $LASTEXITCODE
+        }
+    } catch {
+        Write-Error $_.Exception.Message
     }
 }
 
@@ -131,13 +133,21 @@ do {
 Write-Host ''
 Write-Host -NoNewline "Excellent! Beginning installation from "
 Write-Host $download_location -ForegroundColor DarkCyan
+
+# create temp install folder for running Bash code
+$install_temp_dir = "$link_install_dir\.installer"
+if (!(Test-Path $install_temp_dir)) {
+    mkdir $install_temp_dir
+}
+
 Write-Host "  Ensuring curl is installed" -ForegroundColor DarkGreen
+
 # the installation requires curl in bash, so install it here - some implementations (e.g. Cygwin and Git Bash) don't provide apt-get, meaning this line will fail.
 # most of them include curl anyway, so everything else should be fine.
-Invoke-Bash "sudo apt-get install curl -y" -DieOnError $false
+Invoke-Bash "apt-get install curl -y" -DieOnError $false
 
 # make sure the installation path exists
-Invoke-Bash "sudo mkdir -p `"$install_dir`""
+Invoke-Bash "mkdir -p `"$install_dir`""
 
 # iterate through each file to download, use curl to place it in the correct location, and ensure permissions are correct
 $downloads = 'slink', 'rmslink', 'lsslink', 'delslink', 'slinky-run.sh', 'relativepath.sh'
@@ -149,29 +159,31 @@ foreach ($download in $downloads) {
 
     # curl is used here instead of Powershell's HTTP functions as we don't know the path in Windows for the installation (in the case of many implementations,
     # the path isn't even accessible).
-    Invoke-Bash "sudo curl -o- -# `"$download_location/$download`" > `"$install_dir/$download`""
-    Invoke-Bash "sudo chmod u+rx `"$install_dir/$download`""
+    Invoke-Bash "curl -o- -# `"$download_location/$download`" > `"$install_dir/$download`""
+    Invoke-Bash "chmod u+rx `"$install_dir/$download`""
 }
 
 # create the .dirchange file, used to update the current directory on windows if the bash one changes
-Invoke-Bash "sudo mkdir -p `"$slink_install_dir`""
-Invoke-Bash "sudo touch `"$slink_install_dir/.dirchange`""
+Invoke-Bash "mkdir -p `"$slink_install_dir`""
+Invoke-Bash "touch `"$slink_install_dir/.dirchange`""
 
 Write-Host "  Writing configuration file" -ForegroundColor DarkGreen
+
 # again writing to the files with bash as we do not necessarily have access to these files from Windows
-Invoke-Bash "sudo echo -e `"install_dir=\`"$slink_install_dir\`"`" > `"$install_dir/slinky.cfg`""
-Invoke-Bash "sudo echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"install_dir=\`"$slink_install_dir\`"`" > `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"run_file=\`"$install_dir/slinky-run.sh\`"`" >> `"$install_dir/slinky.cfg`""
+
 # path goes through several layers of string execution, hence why so many slashes are required (incredibly ugly, I know)
-Invoke-Bash "sudo echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
-Invoke-Bash "sudo echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
-Invoke-Bash "sudo echo -e `"use_color=true`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"win_bash=\`"$($bash_dir.replace('\', '\\\\\\\\\\\\\\\\'))\`"`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"command_prepend=\`"$command_prepend\`"`" >> `"$install_dir/slinky.cfg`""
+Invoke-Bash "echo -e `"use_color=true`" >> `"$install_dir/slinky.cfg`""
 
 Write-Host "  Creating Slinky command links for Windows use (if any of these fail, Slinky is not installed)" -ForegroundColor DarkGreen
 # slink the actual slink commands so they are accessible from the Windows prompt, as they are implemented as shell scripts
-Invoke-Bash "sudo `"$install_dir/slink`" slink `"$install_dir/slink`""
-Invoke-Bash "sudo `"$install_dir/slink`" rmslink `"$install_dir/rmslink`""
-Invoke-Bash "sudo `"$install_dir/slink`" lsslink `"$install_dir/lsslink`""
-Invoke-Bash "sudo `"$install_dir/slink`" delslink `"$install_dir/delslink`""
+Invoke-Bash "`"$install_dir/slink`" slink `"$install_dir/slink`""
+Invoke-Bash "`"$install_dir/slink`" rmslink `"$install_dir/rmslink`""
+Invoke-Bash "`"$install_dir/slink`" lsslink `"$install_dir/lsslink`""
+Invoke-Bash "`"$install_dir/slink`" delslink `"$install_dir/delslink`""
 
 # update the system environment variable if told to
 $add_path_start = $add_path.Substring(0, 1).ToLower()
@@ -179,8 +191,13 @@ if ($add_path_start -eq "y") {
     Write-Host "  Adding link install directory to PATH" -ForegroundColor DarkGreen
     $new_path = "$env:Path;$link_install_dir"
     [Environment]::SetEnvironmentVariable("Path", $new_path, [EnvironmentVariableTarget]::Machine)
+
     # update the in-memory path variable in the hopes that this will prevent the need for a terminal re-start
     $env:Path = $new_path
+}
+
+if (Test-Path $install_temp_dir) {
+    Remove-Item -Recurse -Force $install_temp_dir
 }
 
 # display some fun info
