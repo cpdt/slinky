@@ -67,6 +67,7 @@ function Invoke-Bash {
     $p.StartInfo.FileName = $bash_dir
     $p.StartInfo.UseShellExecute = $false
     $p.StartInfo.RedirectStandardInput = $true
+    $p.StartInfo.Verb = "runas"
     $p.Start() > $null
 
     $p.StandardInput.Write("$command`n")
