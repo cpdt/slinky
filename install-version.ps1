@@ -64,8 +64,12 @@ function Invoke-Bash {
     param($command, $DieOnError = $true)
 
     # fixme: this is a really bad solution, try to find a way to run Bash in admin mode?
-    $command = "sudo $command"
-
+    $run_command = @"
+if hash su 2>/dev/null; then
+    su
+fi
+$command
+"@
     function Write-Error {
         Write-Host -NoNewline "  Failed to run " -ForegroundColor Red
         Write-Host -NoNewline $command -ForegroundColor Yellow
@@ -81,7 +85,7 @@ function Invoke-Bash {
 
     # write the command to a file accessible by both Windows and Linux
     try {
-        [System.IO.File]::WriteAllText("$install_temp_dir\command.sh", $command)
+        [System.IO.File]::WriteAllText("$install_temp_dir\command.sh", $run_command)
         &$bash_dir "`"$slink_install_dir/.installer/command.sh`""
 
         if ($LASTEXITCODE -ne 0) {
