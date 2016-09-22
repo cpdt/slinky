@@ -167,8 +167,9 @@ foreach ($download in $downloads) {
 
     # curl is used here instead of Powershell's HTTP functions as we don't know the path in Windows for the installation (in the case of many implementations,
     # the path isn't even accessible).
+    Invoke-Bash "touch `"$install_dir/$download`""
+    Invoke-Bash "chmod u+rwx `"$install_dir/$download`""
     Invoke-Bash "curl -o- -# `"$download_location/$download`" > `"$install_dir/$download`""
-    Invoke-Bash "chmod u+rx `"$install_dir/$download`""
 }
 
 # create the .dirchange file, used to update the current directory on windows if the bash one changes
