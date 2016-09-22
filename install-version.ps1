@@ -78,7 +78,7 @@ function Invoke-Bash {
 
     # write the command to a file accessible by both Windows and Linux
     try {
-        $command | Set-Content "$install_temp_dir\command.sh"
+        [System.IO.File]::WriteAllText("$install_temp_dir\command.sh", $command)
         &$bash_dir "`"$slink_install_dir/.installer/command.sh`""
 
         if ($LASTEXITCODE -ne 0) {
@@ -137,7 +137,7 @@ Write-Host $download_location -ForegroundColor DarkCyan
 # create temp install folder for running Bash code
 $install_temp_dir = "$link_install_dir\.installer"
 if (!(Test-Path $install_temp_dir)) {
-    mkdir $install_temp_dir
+    mkdir $install_temp_dir > $null
 }
 
 Write-Host "  Ensuring curl is installed" -ForegroundColor DarkGreen
