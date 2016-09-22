@@ -63,6 +63,9 @@ function Write-Conf {
 function Invoke-Bash {
     param($command, $DieOnError = $true)
 
+    # fixme: this is a really bad solution, try to find a way to run Bash in admin mode?
+    $command = "sudo $command"
+
     function Write-Error {
         Write-Host -NoNewline "  Failed to run " -ForegroundColor Red
         Write-Host -NoNewline $command -ForegroundColor Yellow
