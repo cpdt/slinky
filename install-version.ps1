@@ -65,10 +65,11 @@ function Invoke-Bash {
 
     # fixme: this is a really bad solution, try to find a way to run Bash in admin mode?
     $run_command = @"
-if hash su 2>/dev/null; then
-    su
+if hash sudo 2>/dev/null; then
+    sudo $command
+else
+    $command
 fi
-$command
 "@
     function Write-Error {
         Write-Host -NoNewline "  Failed to run " -ForegroundColor Red
