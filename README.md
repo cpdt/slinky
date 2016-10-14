@@ -10,21 +10,10 @@ Slinky allows you to run Linux commands in the Windows shell - instead of having
 
 ## Install
 
-All of the scripts below download a Powershell script and execute it on your machine.
+To install Slinky, run the following command in your Bash environment.
 
-**Cmd.exe**
 ```
-@powershell -NoProfile -ExecutionPolicy Bypass -Command "iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1'))"
-```
-
-**Powershell.exe** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
-```
-iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1'))
-```
-
-**Powershell v3+** (ensure [Get-ExecutionPolicy](https://technet.microsoft.com/library/hh847748.aspx) is at least RemoteSigned)
-```
-iwr https://raw.githubusercontent.com/cpdt/slinky/master/install.ps1 -UseBasicParsing | iex
+bash <(curl https://raw.githubusercontent.com/cpdt/slinky/master/install.sh)
 ```
 
 ## Usage
