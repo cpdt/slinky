@@ -23,10 +23,13 @@ function display_help {
 }
 
 AUTO_MODE=false
+BASH_EXE=0
+CMD_DEST=0
+LINK_DEST=0
+PREPEND=0
 
 # parse command-line arguments
-for i in "$CMD_ARGUMENTS"; do
-    echo $i
+for i in "${CMD_ARGUMENTS[@]}"; do
     case $i in
         -h|--help)
             display_help
@@ -58,9 +61,9 @@ function read_question {
     local passed_val=$3
     local read_value
 
-    if $AUTO_MODE; then passed_val="$default"; fi
+    if [ "$AUTO_MODE" == "true" ] && [[ $passed_val == 0 ]]; then passed_val="$default"; fi
     echo -ne "\e[36;1m$question \e[0m\e[33m[$default]\e[0m : "
-    if [ -z "$passed_val" ]; then
+    if [[ $passed_val == 0 ]]; then
         read read_value
         if [ -z "$read_value" ]; then read_value="$default"; fi
     else
@@ -111,7 +114,7 @@ while : ; do
     write_conf "command_prepend" "\"$COMMAND_PREPEND\""
     write_conf "use_color" "true"
 
-    read_question "Is this okay?" "Y/n"
+    read_question "Is this okay?" "Y/n" 0
     CONF_OK="$RETURN"
 
     [[ "$CONF_OK" != y* ]] && [[ "$CONF_OK" != Y* ]] && {
@@ -162,7 +165,7 @@ run_cmd "\"$CMD_DIR/slink\" delslink \"$CMD_DIR/delslink\""
 # display some fun info
 echo -e "\e[32m  Finished installing Slinky!"
 echo
-echo -e "\e[32;1mNEXT STEPS:"
+echo -e "\e[32;1mNEXT STEPS:\e[0m"
 echo -e "\e[32m 1.\e[0m Add \e[36m$LINK_DIR\e[0m to your PATH in Windows"
 echo -e "\e[32m 2.\e[0m Run \e[33;1mslink <command>\e[0m to bind a command, and \e[33;1mrmslink <command>\e[0m to remove a command"
 echo -e "\e[32m 3.\e[0m Star Slinky on Github at \e[36mhttps://github.com/cpdt/slinky"

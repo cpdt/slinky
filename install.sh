@@ -1,6 +1,6 @@
 #!/bin/bash
 stub_version='3.0.0'
-CMD_ARGUMENTS=$@
+CMD_ARGUMENTS=( "$@" )
 
 function array_contains {
     local e
@@ -18,14 +18,12 @@ function read_question {
 function load_version {
     INSTALL_VER=$1
     if [ "$1" == "local" ]; then
-        #cat "./install-version.sh" | bash -s -- $CMD_ARGUMENTS
         INSTALL_VER="develop"
         eval "$(cat ./install-version.sh)"
         exit
     fi
 
     ROOT_URL="https://raw.githubusercontent.com/cpdt/slinky/$1"
-    # todo, clean up
     EXECUTE_SCRIPT=$(curl -s --fail "$ROOT_URL/install-version.sh") || EXECUTE_SCRIPT=$(curl -s --fail "$ROOT_URL/install.sh") || {
         # display warning for powershell installer versions
         echo ""
@@ -37,10 +35,10 @@ function load_version {
     }
 
     eval "$EXECUTE_SCRIPT"
-    #echo "$EXECUTE_SCRIPT" | bash -s -- "--install_version=$1" $CMD_ARGUMENTS
     exit $?
 }
 
+# parse command-line arguments
 for i in "$@"; do
     case $i in
         -V|--version)
