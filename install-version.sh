@@ -140,7 +140,7 @@ DOWNLOADS=( 'slink' 'rmslink' 'lsslink' 'delslink' 'slinky-run.sh' 'relativepath
 for file in "${DOWNLOADS[@]}"; do
     echo -e "\e[32m  Downloading \e[36m$DOWNLOAD_LOCATION/$file\e[32m to \e[36m$CMD_DIR/$file\e[0m"
     run_cmd "touch \"$CMD_DIR/$file\""
-    run_cmd "chmod u+rwx \"$CMD_DIR/$file\""
+    run_cmd "chmod a+rx \"$CMD_DIR/$file\""
     run_cmd "curl -o- -# \"$DOWNLOAD_LOCATION/$file\" > \"$CMD_DIR/$file\""
 done
 
