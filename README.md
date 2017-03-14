@@ -13,12 +13,6 @@ Slinky allows you to run Linux commands in the Windows shell - instead of having
 To install Slinky, run the following command in your Bash environment.
 
 ```
-sudo i; bash <(curl https://raw.githubusercontent.com/cpdt/slinky/master/install.sh); exit
-```
-
-If you get an error explaining that the `sudo` command does not exist (e.g. on Git Bash), remove it:
-
-```
 bash <(curl https://raw.githubusercontent.com/cpdt/slinky/master/install.sh)
 ```
 
