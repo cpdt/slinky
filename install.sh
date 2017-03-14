@@ -33,8 +33,8 @@ function load_version {
         echo -e "\e[33m  @powershell -NoProfile -ExecutionPolicy Bypass -Command \"iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/cpdt/slinky/$1/install.ps1'))\"\e[0m"
         exit 1
     }
-
-    eval "$EXECUTE_SCRIPT"
+   
+    sudo eval "$EXECUTE_SCRIPT"
     exit $?
 }
 
