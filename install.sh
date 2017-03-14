@@ -34,7 +34,7 @@ function load_version {
         exit 1
     }
    
-    sudo eval "$EXECUTE_SCRIPT"
+    eval "$EXECUTE_SCRIPT"
     exit $?
 }
 
