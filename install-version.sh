@@ -97,7 +97,7 @@ echo "Welcome to the Slinky ($INSTALL_VER) installation script"
 
 # repeat until the user says its ok
 while : ; do
-    read_question "Bash executable location (as Windows path)" "C:/System32/bash.exe" "$BASH_EXE"
+    read_question "Bash executable location (as Windows path)" "C:/Windows/System32/bash.exe" "$BASH_EXE"
     BASH_PATH="$RETURN"
     read_question "Install directory (as Linux path)" "/usr/local/bin" "$CMD_DEST"
     CMD_DIR="$RETURN"
