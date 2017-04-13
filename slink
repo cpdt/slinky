@@ -37,7 +37,7 @@ dirchange_name="%~dp0.dirchange"
 mkdir -p $install_dir
 echo -e "@echo off\r" > $file_name
 echo -e "rem $linux_command\r" >> $file_name
-echo -e "\"$win_bash\" $run_file $linux_command %*\r" >> $file_name
+echo -e "\"$win_bash\" $run_file \"$linux_command\" %*\r" >> $file_name
 echo -e "set dirchange=\r" >> $file_name
 echo -e "set /p dirchange=<$dirchange_name\r" >> $file_name
 echo -e "if defined dirchange cd %dirchange%\r" >> $file_name
